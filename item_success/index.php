@@ -1,9 +1,9 @@
 <?php
 /*
-Plugin Name: Success page
+Plugin Name: Success page/ Item success
 Plugin URI: http://www.osclass.org/
 Description: Success page
-Version: 1.0
+Version: 1.0.0
 Author: Osclass
 Author URI: http://www.osclass.org/
 Short Name: Success page
@@ -17,26 +17,28 @@ osc_add_route('item-success', 'item-success$', 'item-success', 'item_success/ite
 
 
 function item_success_redirect($item) {
-    if( isset($item['pk_i_id']) ) {
-        Session::newInstance()->_dropKeepForm();
+    if(!OC_ADMIN) {
+        if( isset($item['pk_i_id']) ) {
+            Session::newInstance()->_dropKeepForm();
 
-        if($item['b_active']==0) {
-            osc_add_flash_ok_message( _m('Check your inbox to validate your listing') );
-        } else {
-            // only if enabled and active can show item-success page
-            if($item['b_active']==1 && $item['b_enabled']==1) {
-                // item-success redirect
-                Session::newInstance()->_set('inserted_item', $item);
-                osc_redirect_to( osc_route_url('item-success') );
-                exit;
+            if($item['b_active']==0) {
+                osc_add_flash_ok_message( _m('Check your inbox to validate your listing') );
+            } else {
+                // only if enabled and active can show item-success page
+                if($item['b_active']==1 && $item['b_enabled']==1) {
+                    // item-success redirect
+                    Session::newInstance()->_set('inserted_item', $item);
+                    osc_redirect_to( osc_route_url('item-success') );
+                    exit;
+                }
             }
+
+            $itemId  = Params::getParam('itemId');
+
+            $category = Category::newInstance()->findByPrimaryKey(Params::getParam('catId'));
+            View::newInstance()->_exportVariableToView('category', $category);
+            osc_redirect_to(osc_search_category_url());
         }
-
-        $itemId  = Params::getParam('itemId');
-
-        $category = Category::newInstance()->findByPrimaryKey(Params::getParam('catId'));
-        View::newInstance()->_exportVariableToView('category', $category);
-        osc_redirect_to(osc_search_category_url());
     }
 }
 osc_add_hook('posted_item', 'item_success_redirect');
