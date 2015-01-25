@@ -25,7 +25,7 @@ if($item!="") {
     <?php } ?>
 
     <div style="margin:2em;">
-        <p><?php _e('Want to publish more listings?', 'item-success'); ?><br/><?php _e('Go ahead, it\'s free!','item_success');?></p>
+        <p><?php _e('Want to publish more listings?', 'item_success'); ?><br/><?php _e('Go ahead, it\'s free!','item_success');?></p>
     </div>
 
     <a class="ui-button ui-button-main" href="<?php echo osc_item_post_url_in_category() ; ?>"><?php _e("Publish another listing", 'item_success');?></a>
